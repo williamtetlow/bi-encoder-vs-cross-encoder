@@ -6,6 +6,8 @@ import torch
 import os
 import argparse
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 def main(limit_dataset_size):
     # Parameters 
     model_name = 'bert-base-uncased'
