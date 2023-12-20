@@ -6,8 +6,6 @@ import torch
 import os
 import argparse
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 def main(limit_dataset_size):
     # Parameters 
     model_name = 'bert-base-uncased'
@@ -17,13 +15,14 @@ def main(limit_dataset_size):
     learning_rate = 0.0001
     model_output_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'models', 'qpp/')
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     # Load and prepare the dataset
     tokenizer = BertTokenizer.from_pretrained(model_name)
     train_dataset = load_and_prepare_data(tokenizer, split='train', limit=limit_dataset_size)
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
-    model = CrossEncoder(model_name, num_labels)
-    model.model.to(model.model.device)
+    model = CrossEncoder(model_name, num_labels, device)
 
     model.train(train_dataloader, epochs)
 

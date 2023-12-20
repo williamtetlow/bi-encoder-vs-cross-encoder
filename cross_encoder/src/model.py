@@ -6,7 +6,8 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 
 class CrossEncoder:
-    def __init__(self, model_name='bert-base-uncased', num_labels=2):
+    def __init__(self, model_name='bert-base-uncased', num_labels=2, device=None):
+        self.device = device if device else torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = BertTokenizer.from_pretrained(model_name)
         self.model = BertForSequenceClassification.from_pretrained(model_name, num_labels=num_labels)
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.0001)
